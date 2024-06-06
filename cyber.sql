@@ -20,7 +20,7 @@ CREATE TABLE stations(
         "session"     Time ,
         "status"     Varchar (100) CHECK(status in ('occuped','free') ),
         "type"     Varchar (200),
-        
+
 
       
 );
@@ -53,3 +53,20 @@ ALTER TABLE Tickets ADD CONSTRAINT FK_Tickets_client_id_Clients FOREIGN KEY (cli
 ALTER TABLE to_use ADD CONSTRAINT clients_fk FOREIGN KEY (client_id_Clients) REFERENCES Clients(client_id);
 ALTER TABLE to_use ADD CONSTRAINT station_fk FOREIGN KEY (station_id_stations) REFERENCES stations(station_id);
 ALTER TABLE to_use ADD CONSTRAINT ticket_fk FOREIGN KEY (ticket_id_Tickets) REFERENCES Tickets(ticket_id);
+
+
+-- Supprimer la contrainte existante
+ALTER TABLE to_use DROP CONSTRAINT ticket_fk;
+
+-- Ajouter la contrainte avec ON DELETE CASCADE
+ALTER TABLE to_use ADD CONSTRAINT ticket_fk FOREIGN KEY (ticket_id_Tickets) REFERENCES Tickets(ticket_id) ON DELETE CASCADE;
+
+
+--fixer quelques bugs avec les fk contraintes
+ALTER TABLE to_use
+DROP CONSTRAINT station_fk,
+ADD CONSTRAINT station_fk
+FOREIGN KEY (station_id_stations)
+REFERENCES stations(station_id)
+ON DELETE CASCADE;
+
